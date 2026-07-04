@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { TopBar } from '../components/TopBar';
 import { EmptyState } from '../components/EmptyState';
 import { ConfirmDialog } from '../components/ConfirmDialog';
+import { Avatar } from '../components/Avatar';
 import { getSalesList } from '../lib/queries';
 import { computeEodSummary } from '../lib/dayClose';
 import { closeDay } from '../lib/dayClose';
@@ -147,12 +148,15 @@ export default function SalesHistoryScreen() {
             sales.map((s) => (
               <div key={s.id} className="list-row" style={{ opacity: s.status === 'void' ? 0.6 : 1 }}>
                 <div className="row-between">
-                  <div style={{ textDecoration: s.status === 'void' ? 'line-through' : 'none' }}>
-                    <div style={{ fontWeight: 600 }}>
-                      #{s.receiptNo} · {s.time} · {s.paymentMethod}
+                  <div className="row" style={{ alignItems: 'flex-start' }}>
+                    <Avatar name={s.soldByName} size={32} />
+                    <div style={{ textDecoration: s.status === 'void' ? 'line-through' : 'none' }}>
+                      <div style={{ fontWeight: 600 }}>
+                        #{s.receiptNo} · {s.time} · {s.paymentMethod}
+                      </div>
+                      <div style={{ fontSize: 'var(--fs-small)', color: 'var(--color-sub)' }}>{s.itemsSummary}</div>
+                      <div style={{ fontSize: 'var(--fs-micro)', color: 'var(--color-faint)' }}>{s.soldByName}</div>
                     </div>
-                    <div style={{ fontSize: 'var(--fs-small)', color: 'var(--color-sub)' }}>{s.itemsSummary}</div>
-                    <div style={{ fontSize: 'var(--fs-micro)', color: 'var(--color-faint)' }}>{s.soldByName}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
                     <div className="tabular" style={{ fontWeight: 700 }}>{formatMoney(s.totalAmount)}</div>

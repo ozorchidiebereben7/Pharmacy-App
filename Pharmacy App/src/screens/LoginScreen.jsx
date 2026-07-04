@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { Logo } from '../components/Logo';
+import { Avatar } from '../components/Avatar';
 
 export default function LoginScreen() {
   const { listUsers, login } = useApp();
@@ -41,16 +43,17 @@ export default function LoginScreen() {
     return (
       <div className="screen">
         <div className="screen-body stack">
-          <div style={{ textAlign: 'center', margin: '32px 0 8px' }}>
-            <h1 className="font-display" style={{ fontSize: 'var(--fs-hero)', margin: 0, color: 'var(--color-primary)' }}>
+          <div style={{ textAlign: 'center', margin: '32px 0 8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-3)' }}>
+            <Logo size={56} />
+            <h1 className="font-display" style={{ fontSize: 'var(--fs-h1)', margin: 0, color: 'var(--color-ink)' }}>
               Pharmacy App
             </h1>
-            <p style={{ color: 'var(--color-sub)', margin: '8px 0 0' }}>Select your name to sign in</p>
+            <p style={{ color: 'var(--color-sub)', margin: 0 }}>Select your name to sign in</p>
           </div>
           <div className="grid-2">
             {users.map((u) => (
               <button key={u.id} className="user-tile" onClick={() => setSelectedUser(u)}>
-                <span className="avatar">{u.name.charAt(0)}</span>
+                <Avatar name={u.name} size={56} />
                 <span style={{ fontWeight: 600 }}>{u.name}</span>
                 <span className="pill pill-neutral">{u.role}</span>
               </button>
@@ -65,10 +68,8 @@ export default function LoginScreen() {
   return (
     <div className="screen">
       <div className="screen-body stack">
-        <div style={{ textAlign: 'center', margin: '24px 0' }}>
-          <span className="avatar" style={{ display: 'inline-flex', width: 64, height: 64, borderRadius: '50%', background: 'var(--color-primary-tint)', color: 'var(--color-primary)', alignItems: 'center', justifyContent: 'center', fontSize: 24, fontFamily: 'var(--font-display)', fontWeight: 700 }}>
-            {selectedUser.name.charAt(0)}
-          </span>
+        <div style={{ textAlign: 'center', margin: '24px 0', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Avatar name={selectedUser.name} size={64} />
           <h2 style={{ margin: '12px 0 0' }}>{selectedUser.name}</h2>
           <p style={{ color: 'var(--color-sub)', margin: '4px 0 0' }}>Enter 4-digit PIN</p>
         </div>

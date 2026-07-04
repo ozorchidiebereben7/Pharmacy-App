@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { TopBar } from '../components/TopBar';
 import { EmptyState } from '../components/EmptyState';
 import { InfiniteList } from '../components/InfiniteList';
+import { Avatar } from '../components/Avatar';
 
 const ACTION_LABELS = {
   SALE: 'Sale',
@@ -54,8 +55,13 @@ export default function ActivityLogScreen() {
                     {new Date(e.timestamp).toLocaleString()}
                   </span>
                 </div>
-                <div style={{ fontWeight: 600, marginTop: 4 }}>{e.userName || 'Unknown user'}</div>
-                <div style={{ fontSize: 'var(--fs-small)', color: 'var(--color-sub)' }}>{e.table_affected}</div>
+                <div className="row" style={{ marginTop: 6 }}>
+                  <Avatar name={e.userName} size={28} />
+                  <div>
+                    <div style={{ fontWeight: 600 }}>{e.userName || 'Unknown user'}</div>
+                    <div style={{ fontSize: 'var(--fs-small)', color: 'var(--color-sub)' }}>{e.table_affected}</div>
+                  </div>
+                </div>
                 {(e.before || e.after) && (
                   <div style={{ fontSize: 'var(--fs-micro)', color: 'var(--color-faint)', marginTop: 4, wordBreak: 'break-word' }}>
                     {e.before && <div>Before: {JSON.stringify(e.before)}</div>}

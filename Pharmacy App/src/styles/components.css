@@ -276,7 +276,6 @@
 }
 .nav-tile:active { transform: scale(0.98); }
 .nav-tile .label { font-weight: 600; font-size: var(--fs-body); }
-.nav-tile .icon { font-size: 22px; }
 
 .hero-card {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-deep));
@@ -292,10 +291,50 @@
   line-height: 1.1;
 }
 .hero-card .hero-label { font-size: var(--fs-small); opacity: 0.85; margin-bottom: 4px; }
+.hero-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--space-4); }
 .hero-chips { display: flex; gap: var(--space-3); margin-top: var(--space-4); }
-.hero-chip { background: rgba(255,255,255,0.14); border-radius: var(--radius-md); padding: var(--space-2) var(--space-3); flex: 1; }
-.hero-chip .v { font-weight: 700; font-size: var(--fs-h2); }
+.hero-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+.hero-chip .v { font-weight: 700; font-size: var(--fs-h2); line-height: 1.1; }
 .hero-chip .l { font-size: var(--fs-micro); text-transform: uppercase; letter-spacing: 0.04em; opacity: 0.85; }
+
+/* Icon-forward stat badge, inspired by dashboard-card iconography */
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: var(--radius-md);
+  font-size: 18px;
+}
+.icon-badge-tint { background: var(--color-primary-tint); }
+.icon-badge-on-dark { background: rgba(255, 255, 255, 0.16); }
+.icon-badge-danger { background: var(--color-danger-tint); }
+.icon-badge-warn { background: var(--color-warn-tint); }
+
+/* Avatar initials chip, inspired by the reference's people tables */
+.avatar-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-weight: 700;
+  font-family: var(--font-display);
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.logo-mark { display: inline-flex; align-items: center; gap: var(--space-2); }
+.logo-wordmark { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-h2); color: var(--color-ink); }
 
 .list-row {
   background: var(--color-surface);
@@ -319,20 +358,6 @@
   border: none;
   min-height: var(--touch-cta);
 }
-.user-tile .avatar {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--color-primary-tint);
-  color: var(--color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 20px;
-  font-family: var(--font-display);
-}
-
 .link-btn {
   background: none;
   border: none;
