@@ -100,12 +100,12 @@ function AppShell() {
   );
 }
 
-export default function App() {
+export default function App({ Router = BrowserRouter }) {
   return (
     <AppProvider>
-      <BrowserRouter>
+      <Router>
         <AppShell />
-      </BrowserRouter>
+      </Router>
     </AppProvider>
   );
 }

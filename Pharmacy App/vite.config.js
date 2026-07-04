@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.svg', 'wasm/sql-wasm.wasm', 'fonts/*.woff2'],
+      includeAssets: ['favicon.svg'],
       manifest: {
         name: 'Pharmacy App',
         short_name: 'Pharmacy',

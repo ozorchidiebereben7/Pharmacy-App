@@ -9,6 +9,7 @@ lerna-debug.log*
 
 node_modules
 dist
+dist-artifact
 dist-ssr
 *.local
 dev-dist
@@ -16,8 +17,9 @@ dev-dist
 # sync server's locally persisted backups
 server/data
 
-# ad-hoc e2e scripts used during development, not part of the app
+# ad-hoc e2e/smoke scripts used during development, not part of the app
 /e2e*.mjs
+/smoke*.mjs
 
 # Editor directories and files
 .vscode/*

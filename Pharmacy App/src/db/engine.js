@@ -2,9 +2,27 @@ import initSqlJs from 'sql.js';
 import { get, set } from 'idb-keyval';
 import { SCHEMA_SQL } from './schema';
 import { pushBackup, pullLatestBackup } from '../lib/sync';
+import wasmAssetUrl from '../assets/wasm/sql-wasm-browser.wasm?url';
 
 const IDB_KEY = 'pharmacy-app-db-v1';
 let SQL = null;
+
+// Resolves to a real file (dev/prod build) or a base64 data: URI (single-file
+// artifact build, where assetsInlineLimit is raised). Decoding a data: URI
+// directly and handing sql.js the raw bytes via `wasmBinary` — instead of
+// letting it `fetch()` the URL itself — means this works even under a CSP
+// that blocks fetch/XHR entirely, which the file-serving path would not.
+async function loadWasmBinary(url) {
+  if (url.startsWith('data:')) {
+    const base64 = url.slice(url.indexOf(',') + 1);
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+  const res = await fetch(url);
+  return new Uint8Array(await res.arrayBuffer());
+}
 
 function rowsFromResult(result) {
   if (!result || result.length === 0) return [];
@@ -26,7 +44,8 @@ export class Engine {
 
   static async create() {
     if (!SQL) {
-      SQL = await initSqlJs({ locateFile: (file) => `/wasm/${file}` });
+      const wasmBinary = await loadWasmBinary(wasmAssetUrl);
+      SQL = await initSqlJs({ wasmBinary });
     }
     let bytes = await get(IDB_KEY);
     if (!bytes) {
