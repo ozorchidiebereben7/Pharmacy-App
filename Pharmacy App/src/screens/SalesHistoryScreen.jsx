@@ -29,7 +29,7 @@ export default function SalesHistoryScreen() {
   const [closing, setClosing] = useState(false);
   const [closeError, setCloseError] = useState('');
 
-  const staff = useMemo(() => engine.all(`SELECT id, name FROM users WHERE active = 1 ORDER BY name`), [engine]);
+  const staff = useMemo(() => engine.all(`SELECT id, name, active FROM users ORDER BY active DESC, name ASC`), [engine]);
   const sales = useMemo(
     () => getSalesList(engine, isOwner ? { date, staffId: staffId || undefined } : { date, onlyUserId: currentUser.id }),
     [engine, date, staffId, isOwner, currentUser.id, refreshTick]
@@ -82,7 +82,7 @@ export default function SalesHistoryScreen() {
               <select value={staffId} onChange={(e) => setStaffId(e.target.value)}>
                 <option value="">All staff</option>
                 {staff.map((s) => (
-                  <option key={s.id} value={s.id}>{s.name}</option>
+                  <option key={s.id} value={s.id}>{s.name}{s.active ? '' : ' (Inactive)'}</option>
                 ))}
               </select>
             </div>

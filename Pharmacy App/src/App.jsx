@@ -11,6 +11,7 @@ import StockListScreen from './screens/StockListScreen';
 import SalesHistoryScreen from './screens/SalesHistoryScreen';
 import ActivityLogScreen from './screens/ActivityLogScreen';
 import PinChangeScreen from './screens/PinChangeScreen';
+import StaffScreen from './screens/StaffScreen';
 
 function AppShell() {
   const { ready } = useApp();
@@ -82,6 +83,14 @@ function AppShell() {
           element={
             <ProtectedRoute ownerOnly>
               <ActivityLogScreen />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff"
+          element={
+            <ProtectedRoute ownerOnly>
+              <StaffScreen />
             </ProtectedRoute>
           }
         />

@@ -13,6 +13,7 @@ const ACTION_LABELS = {
   PRICE: 'Price Change',
   CLOSEOUT: 'Close-out',
   LOGIN: 'Login',
+  STAFF: 'Staff Change',
 };
 
 function safeParse(json) {

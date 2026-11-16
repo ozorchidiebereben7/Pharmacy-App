@@ -109,10 +109,16 @@ export default function DashboardScreen() {
             <span className="label">{isOwner ? 'Sales History / EOD' : 'My Sales'}</span>
           </button>
           {isOwner && (
-            <button className="nav-tile" onClick={() => navigate('/activity')}>
-              <span className="icon-badge icon-badge-tint">🗂</span>
-              <span className="label">Activity Log</span>
-            </button>
+            <>
+              <button className="nav-tile" onClick={() => navigate('/staff')}>
+                <span className="icon-badge icon-badge-tint">👥</span>
+                <span className="label">Staff & Users</span>
+              </button>
+              <button className="nav-tile" onClick={() => navigate('/activity')}>
+                <span className="icon-badge icon-badge-tint">🗂</span>
+                <span className="label">Activity Log</span>
+              </button>
+            </>
           )}
         </div>
       </div>

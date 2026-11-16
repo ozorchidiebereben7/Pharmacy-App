@@ -55,6 +55,26 @@ export class Engine {
     }
     const db = bytes ? new SQL.Database(new Uint8Array(bytes)) : new SQL.Database();
     db.run(SCHEMA_SQL);
+    const tableInfo = rowsFromResult(
+      db.exec(`SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'activity_log'`)
+    );
+    if (tableInfo.length > 0 && tableInfo[0].sql && !tableInfo[0].sql.includes("'STAFF'")) {
+      db.run(`
+        ALTER TABLE activity_log RENAME TO activity_log_old;
+        CREATE TABLE activity_log (
+          id TEXT PRIMARY KEY,
+          user_id TEXT NOT NULL,
+          action TEXT NOT NULL CHECK (action IN ('SALE','VOID','ADD_STOCK','ADJUST','PRICE','CLOSEOUT','LOGIN','STAFF')),
+          table_affected TEXT NOT NULL,
+          before_value TEXT,
+          after_value TEXT,
+          timestamp TEXT NOT NULL
+        );
+        INSERT INTO activity_log SELECT * FROM activity_log_old;
+        DROP TABLE activity_log_old;
+        CREATE INDEX IF NOT EXISTS idx_activity_timestamp ON activity_log (timestamp);
+      `);
+    }
     const engine = new Engine(db);
     await engine.persist();
     return engine;

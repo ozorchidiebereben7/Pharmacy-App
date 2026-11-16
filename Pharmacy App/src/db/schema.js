@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS day_closeouts (
 CREATE TABLE IF NOT EXISTS activity_log (
   id TEXT PRIMARY KEY,
   user_id TEXT NOT NULL,
-  action TEXT NOT NULL CHECK (action IN ('SALE','VOID','ADD_STOCK','ADJUST','PRICE','CLOSEOUT','LOGIN')),
+  action TEXT NOT NULL CHECK (action IN ('SALE','VOID','ADD_STOCK','ADJUST','PRICE','CLOSEOUT','LOGIN','STAFF')),
   table_affected TEXT NOT NULL,
   before_value TEXT,
   after_value TEXT,

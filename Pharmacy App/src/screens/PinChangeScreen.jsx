@@ -128,8 +128,14 @@ export default function PinChangeScreen() {
 
         {currentUser.role === 'owner' && (
           <form className="card stack" onSubmit={submitReset}>
-            <h2 style={{ margin: 0 }}>Reset apprentice PIN</h2>
+            <div className="row-between">
+              <h2 style={{ margin: 0 }}>Reset apprentice PIN</h2>
+              <button type="button" className="link-btn" onClick={() => navigate('/staff')}>
+                Manage staff →
+              </button>
+            </div>
             {resetSuccess && <div className="pill pill-ok" style={{ display: 'block', padding: 'var(--space-3)' }}>{resetSuccess}</div>}
+            {resetError && <FieldError message={resetError} />}
             <div className={`field ${resetSubmitted && resetErrors.resetTarget ? 'has-error' : ''}`}>
               <label>Apprentice</label>
               <select value={resetTarget} onChange={(e) => setResetTarget(e.target.value)}>

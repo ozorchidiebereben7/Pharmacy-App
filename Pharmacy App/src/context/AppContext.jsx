@@ -80,14 +80,33 @@ export function AppProvider({ children }) {
     [engine]
   );
 
+  const refreshCurrentUser = useCallback(() => {
+    if (!engine || !currentUser) return;
+    const fresh = engine.one(`SELECT id, name, role, active FROM users WHERE id = ?`, [currentUser.id]);
+    if (!fresh || fresh.active === 0) {
+      setCurrentUser(null);
+      return;
+    }
+    setCurrentUser({ id: fresh.id, name: fresh.name, role: fresh.role });
+  }, [engine, currentUser]);
+
   const changePin = useCallback(
     async (userId, newPin) => {
       const hash = await hashPin(newPin);
+      const target = engine.one(`SELECT name FROM users WHERE id = ?`, [userId]);
       await engine.transaction(async (e) => {
         e.run(`UPDATE users SET pin_hash = ? WHERE id = ?`, [hash, userId]);
+        e.logActivity({
+          userId: currentUser?.id || userId,
+          action: 'STAFF',
+          tableAffected: 'users',
+          before: { name: target?.name, action: 'pin_change' },
+          after: { name: target?.name, pin_updated: true },
+          timestamp: new Date().toISOString(),
+        });
       });
     },
-    [engine]
+    [engine, currentUser]
   );
 
   const requestReauth = useCallback(() => {
@@ -99,13 +118,14 @@ export function AppProvider({ children }) {
 
   const submitReauth = useCallback(
     async (pin) => {
-      const owner = engine.one(`SELECT * FROM users WHERE role = 'owner' AND active = 1 LIMIT 1`);
-      const valid = owner && (await verifyPin(pin, owner.pin_hash));
-      if (valid) {
-        setReauthRequest(null);
-        reauthResolver.current?.(true);
-        reauthResolver.current = null;
-        return true;
+      const owners = engine.all(`SELECT * FROM users WHERE role = 'owner' AND active = 1`);
+      for (const owner of owners) {
+        if (await verifyPin(pin, owner.pin_hash)) {
+          setReauthRequest(null);
+          reauthResolver.current?.(true);
+          reauthResolver.current = null;
+          return true;
+        }
       }
       return false;
     },
@@ -127,12 +147,13 @@ export function AppProvider({ children }) {
       login,
       logout,
       changePin,
+      refreshCurrentUser,
       requestReauth,
       reauthRequest,
       submitReauth,
       cancelReauth,
     }),
-    [engine, ready, currentUser, listUsers, login, logout, changePin, requestReauth, reauthRequest, submitReauth, cancelReauth]
+    [engine, ready, currentUser, listUsers, login, logout, changePin, refreshCurrentUser, requestReauth, reauthRequest, submitReauth, cancelReauth]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
